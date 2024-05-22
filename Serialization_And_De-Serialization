@@ -1,0 +1,96 @@
+package serializationDemo1;
+import java.io.Serializable;
+import java.util.Scanner;
+
+public class Customer implements Serializable {
+	 private Integer EmpId;
+	 private String EmpName;
+	 private Double EmpSal;
+ 
+	 public Customer(Integer empId, String empName, Double empSal) {
+		 super();
+		 EmpId = empId;
+		 EmpName = empName;
+		 EmpSal = empSal;
+	 }
+
+	@Override
+	public String toString() {
+		return "Customer [EmpId=" + EmpId + ", EmpName=" + EmpName + ", EmpSal=" + EmpSal + "]";
+	}
+	 
+	public static Customer GenerateCustDetails() 
+{		
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter emp Id:");
+		Integer id=sc.nextInt();
+		System.out.println("Enter emp Name:");
+		String name=sc.next();
+		System.out.println("Enter emp salary:");
+		Double sal=sc.nextDouble();
+		return new Customer(id, name, sal);
+		
+	}	 
+}
+//Object Data Store Into FIle
+
+package serializationDemo1;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
+public class SerializationRetrieve {
+public static void main(String[] args) {
+	try {
+		var file=new FileInputStream("D:\\Batch26\\EmpObj.txt");
+		var read=new ObjectInputStream(file);
+		
+		try(file;read){
+			Customer c=null;
+			while((c =(Customer)read.readObject())!=null) {
+				System.out.println(c);
+			}
+			
+		}
+	}catch (Exception e) {
+		System.out.println("End if file reached");
+		e.printStackTrace();
+	}
+}
+}
+
+// Read the Object File form the file 
+package serializationDemo1;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Scanner;
+
+public class SerializationMain {
+
+	public static void main(String[] args) throws IOException {
+	   try {
+		var file=new FileOutputStream("D:\\Batch26\\EmpObj.txt");
+		var store=new ObjectOutputStream(file);
+		var sc=new Scanner(System.in);
+		try(file;store;sc) {
+			System.out.println("Hpw many Object you want to Store");
+			int obj=sc.nextInt();
+			for(int i=1;i<obj;i++) {
+				Customer cus=Customer.GenerateCustDetails();
+				store.writeObject(cus);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Customer Object Stored Successfully");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
+}
+
+
+
+
